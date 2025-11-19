@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CineNova — Películas y Funciones</title>
+  <style>
+    :root{
+      --bg:#030406;
+      --card:#0b1220;
+      --accent:#ff3d3d;
+      --muted:#98a0b3;
+      --glass: rgba(255,255,255,0.03);
+      --radius:12px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: dark;
+    }
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071021 0%,var(--bg) 100%); color:#e6eef8}
+    a{color:inherit;text-decoration:none}
+    header{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:1rem;padding:1rem 1.25rem;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      position:sticky;top:0;backdrop-filter: blur(6px);z-index:20;border-bottom:1px solid rgba(255,255,255,0.03)
+    }
+    .brand{display:flex;align-items:center;gap:.75rem;font-weight:700;font-size:1.125rem}
+    .logo{
+      width:44px;height:44px;border-radius:10px;background:
+      radial-gradient(circle at 30% 30%, #ffd6e0 0%, transparent 18%),
+      linear-gradient(135deg,#ff6b8a, #ff3d6b 60%);display:flex;align-items:center;justify-content:center;
+      box-shadow:0 6px 20px rgba(255,61,107,0.12);flex:0 0 44px;color:#0b0a0d;font-weight:800
+    }
+    nav{display:flex;gap:0.5rem;align-items:center}
+    .nav-links{display:flex;gap:.5rem}
+    .nav-links a{padding:.5rem .75rem;border-radius:8px;font-weight:600;color:var(--muted);font-size:.95rem}
+    .nav-links a:hover{background:var(--glass);color:#fff}
+    .search{display:flex;align-items:center;gap:.5rem;background:var(--glass);padding:.45rem;border-radius:10px}
+    .search input{background:transparent;border:0;color:inherit;outline:none;width:220px;padding:.15rem .25rem}
+    .hero{
+      padding:2rem 1.25rem 1.5rem;display:grid;grid-template-columns:1fr 360px;gap:1rem;align-items:start;
+    }
+    .hero-card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);padding:1.25rem;min-height:220px;box-shadow:0 10px 30px rgba(3,10,18,0.6);
+      overflow:hidden;position:relative
+    }
+    .featured{
+      display:flex;gap:1.25rem;align-items:center;
+    }
+    .poster{
+      width:140px;height:200px;border-radius:8px;flex:0 0 140px;overflow:hidden;
+      background:linear-gradient(180deg,#2a2f47,#0b1220);display:grid;place-items:center;color:#fff;font-weight:700;
+      box-shadow:0 8px 24px rgba(0,0,0,0.6)
+    }
+    .movie-info h2{margin:0 0 .35rem 0;font-size:1.25rem}
+    .movie-info p{margin:0;color:var(--muted);font-size:.95rem}
+    .cta{margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap}
+    .btn{background:var(--accent);border:0;color:white;padding:.6rem .9rem;border-radius:10px;font-weight:700;cursor:pointer}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);font-weight:600}
+    .sidebar{
+      padding:1rem;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border-radius:var(--radius);min-height:220px
+    }
+    main{padding:1rem 1.25rem}
+    .section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+    .movies-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+    .movies-row{display:flex;gap:1rem;overflow:auto;padding-bottom:.25rem}
+    .card{background:var(--card);border-radius:12px;padding:0.8rem;overflow:hidden;border:1px solid rgba(255,255,255,0.02);min-width:200px;flex:0 0 200px;cursor:pointer}
+    .card .thumb{height:240px;border-radius:8px;background:linear-gradient(180deg,#162033,#071021);display:flex;align-items:end;padding:.6rem}
+    .card h3{margin:.6rem 0 0 0;font-size:1rem}
+    .meta{display:flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.9rem;margin-top:.35rem}
+    .showtimes{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.6rem}
+    .chip{background:transparent;border:1px solid rgba(255,255,255,0.03);padding:.35rem .5rem;border-radius:8px;font-weight:600;color:var(--muted);cursor:pointer}
+    footer{padding:1.25rem;background:transparent;border-top:1px solid rgba(255,255,255,0.03);display:flex;justify-content:space-between;align-items:center}
+    .overlay{position:fixed;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.8));display:none;align-items:center;justify-content:center;z-index:50}
+    .overlay.open{display:flex}
+    .modal{background:linear-gradient(180deg,#081426,#071022);padding:1rem;border-radius:12px;width:min(880px,96%);box-shadow:0 18px 60px rgba(2,6,23,0.8)}
+    .modal-grid{display:grid;grid-template-columns:220px 1fr;gap:1rem}
+    .time-list{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+    .time-btn{padding:.5rem .7rem;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);cursor:pointer;color:var(--muted);font-weight:700}
+    .close{background:transparent;border:0;color:var(--muted);cursor:pointer;font-size:1rem}
+    .tabs{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+    .tab-btn{padding:.5rem .75rem;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--muted);cursor:pointer;font-weight:700}
+    .tab-btn.active{background:var(--glass);color:#fff;border-color:rgba(255,255,255,0.06)}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+    .form-row{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.6rem}
+    input,select,textarea{background:transparent;border:1px solid rgba(255,255,255,0.03);padding:.6rem;border-radius:8px;color:var(--muted);outline:none}
+    @media (max-width:880px){
+      .hero{grid-template-columns:1fr;gap:.75rem}
+      .sidebar{order:2}
+      .featured{flex-direction:row}
+      .search input{width:120px}
+      header{padding:.6rem .8rem}
+      .card{min-width:150px}
+    }
+    .rating{background:linear-gradient(90deg,#ffd86b,#ffb05b);padding:.25rem .45rem;border-radius:6px;font-weight:800;color:#081426}
+    .carousel-controls{display:flex;gap:.5rem;align-items:center}
+
+    /* Seat map styles */
+    .seat-map{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-top:.6rem}
+    .seat{background:linear-gradient(180deg,#0d2238,#071021);border:1px solid rgba(255,255,255,0.04);height:36px;border-radius:6px;display:grid;place-items:center;cursor:pointer;color:var(--muted);font-weight:700}
+    .seat.reserved{background:#2b2b2b;color:#8a8a8a;cursor:not-allowed;opacity:.7;border-color:rgba(255,0,0,0.12)}
+    .seat.selected{background:linear-gradient(135deg,#ff7b7b,#ff3d6b);color:#081426;border-color:var(--accent)}
+    .seat-legend{display:flex;gap:.6rem;align-items:center;margin-top:.6rem;color:var(--muted);font-size:.9rem}
+    .legend-item{display:flex;gap:.4rem;align-items:center}
+    .legend-box{width:18px;height:18px;border-radius:4px}
+  </style>
+</head>
+<body>
+  <header>
+  <div class="brand">
+    <div class="logo" aria-hidden>CN</div>
+    <div>
+    <div style="font-weight:800">CineNova</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:2px">Películas • Funciones • Entradas</div>
+    </div>
+  </div>
+
+  <nav>
+    <div class="nav-links" role="navigation" aria-label="Principal">
+    <a href="#" data-tab="peliculas" aria-current="page">En cartelera</a>
+    <a href="#" data-tab="proximamente">Próximamente</a>
+    <a href="#" data-tab="ofertas">Ofertas</a>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:.6rem;margin-left:1rem">
+    <div class="search" role="search"></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="opacity:.8"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <input id="search" type="search" placeholder="Buscar películas, géneros..." aria-label="Buscar películas">
+    </div>
+    <button class="btn secondary" id="signIn">Iniciar sesión</button>
+    <!-- NOTE: 'Agregar' button removed per request -->
+    </div>
+  </nav>
+  </header>
+
+  <section class="hero" aria-label="Destacado">
+  <div class="hero-card" role="region" aria-labelledby="featuredTitle">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between">
+    <div>
+      <div style="color:var(--muted);font-weight:700;font-size:.9rem">Destacado</div>
+      <h1 id="featuredTitle" style="margin:.35rem 0 .25rem;font-size:1.5rem">Vive el cine de otra manera</h1>
+      <p style="margin:0;color:var(--muted);max-width:60%">Reserva entradas, descubre funciones y disfruta de pantallas premium con asientos reservados y sonido de calidad.</p>
+    </div>
+    <div style="text-align:right;color:var(--muted);font-size:.9rem">
+      <div style="font-weight:800">En cartelera</div>
+      <div id="nowCount">0 títulos</div>
+    </div>
+    </div>
+
+    <div style="margin-top:1.1rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem">
+      <div class="featured" id="heroFeatured" style="flex:1">
+      <!-- Featured movie rendered by JS -->
+      </div>
+      <div class="carousel-controls">
+      <button class="tab-btn" id="heroPrev" title="Anterior">◀</button>
+      <button class="tab-btn" id="heroNext" title="Siguiente">▶</button>
+      </div>
+    </div>
+
+    <div class="cta">
+      <button class="btn" id="viewNow">Ver funciones</button>
+      <button class="btn secondary" id="browse">Ver todas</button>
+    </div>
+    </div>
+  </div>
+
+  <aside class="sidebar" aria-labelledby="sidebarTitle">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <div id="sidebarTitle" style="font-weight:800">Selecciones rápidas</div>
+      <div style="font-size:.9rem;color:var(--muted)">Funciones populares cerca de ti</div>
+    </div>
+    <div style="font-size:.85rem;color:var(--muted)">Hoy</div>
+    </div>
+
+    <div style="margin-top:.9rem;display:flex;flex-direction:column;gap:.6rem">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;gap:.6rem;align-items:center">
+      <div style="width:56px;height:80px;border-radius:8px;background:linear-gradient(180deg,#1b2540,#071022)"></div>
+      <div>
+        <div style="font-weight:700">La Carrera de Medianoche</div>
+        <div style="color:var(--muted);font-size:.85rem">20:30 • Sala 3</div>
+      </div>
+      </div>
+      <button class="btn" id="quickBookFeatured">Reservar</button>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;gap:.6rem;align-items:center">
+      <div style="width:56px;height:80px;border-radius:8px;background:linear-gradient(180deg,#1b2540,#071022)"></div>
+      <div>
+        <div style="font-weight:700">Deriva Oceánica</div>
+        <div style="color:var(--muted);font-size:.85rem">18:00 • Sala 1</div>
+      </div>
+      </div>
+      <button class="btn secondary">Detalles</button>
+    </div>
+
+    <!-- NOTE: Form para añadir película eliminado por solicitud ("quitar el tab entero de agregar") -->
+    </div>
+  </aside>
+  </section>
+
+  <main>
+  <div class="section-title">
+    <h2 style="margin:0">En cartelera</h2>
+    <div style="display:flex;gap:.5rem;align-items:center">
+    <label style="color:var(--muted);font-size:.95rem">Filtrar:</label>
+    <select id="genreFilter" style="background:transparent;border:1px solid rgba(255,255,255,0.03);padding:.4rem;border-radius:8px;color:var(--muted)">
+      <option value="">Todos</option>
+      <option>Acción</option>
+      <option>Drama</option>
+      <option>Animación</option>
+      <option>Terror</option>
+    </select>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button class="tab-btn active" data-panel="panel-peliculas" role="tab" aria-selected="true">Películas</button>
+    <button class="tab-btn" data-panel="panel-detalles" role="tab">Detalles</button>
+    <button class="tab-btn" data-panel="panel-proximas" role="tab">Próximamente</button>
+    <button class="tab-btn" data-panel="panel-ofertas" role="tab">Ofertas</button>
+    <button class="tab-btn" data-panel="panel-login" role="tab">Iniciar sesión</button>
+    <button class="tab-btn" data-panel="panel-registrar" role="tab">Registrarse</button>
+    <button class="tab-btn" data-panel="panel-confirmacion" role="tab">Confirmación</button>
+  </div>
+
+  <!-- Panels -->
+  <section id="panel-peliculas" class="tab-panel active" aria-labelledby="tab-peliculas">
+    <div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+      <div style="font-weight:800">Cartelera</div>
+      <div style="color:var(--muted);font-size:.9rem">Desplaza para ver más</div>
+    </div>
+    <div class="movies-row" id="moviesRow" aria-live="polite">
+      <!-- Movie cards inserted by JS -->
+    </div>
+    </div>
+  </section>
+
+  <section id="panel-detalles" class="tab-panel" aria-hidden="true">
+    <div class="hero-card">
+    <div style="font-weight:800">Detalles de la película</div>
+    <div id="detailContent" style="color:var(--muted);margin-top:.5rem">Seleccione una película para ver información detallada aquí.</div>
+    </div>
+  </section>
+
+  <section id="panel-proximas" class="tab-panel" aria-hidden="true">
+    <div class="hero-card">
+    <div style="font-weight:800">Próximamente</div>
+    <!-- IMPORTANT: Upcoming movies will show cards WITHOUT selectable showtimes.
+       Users cannot reserve for próximas películas; they can only view details. -->
+    <div id="upcomingRow" style="margin-top:.6rem" class="movies-row"></div>
+    </div>
+  </section>
+
+  <section id="panel-ofertas" class="tab-panel" aria-hidden="true">
+    <div class="hero-card">
+    <div style="font-weight:800">Ofertas</div>
+    <div style="margin-top:.6rem;color:var(--muted)">
+      <p style="margin:.2rem 0">Promoción permanente de demo:</p>
+      <div style="font-weight:800;margin-top:.25rem">2x1 en entradas los fines de semana</div>
+      <p style="margin-top:.45rem">Aplicable sábados y domingos en las funciones indicadas. Seleccione una película y una función y se aplicará la promoción en el proceso de compra (demo).</p>
+    </div>
+    </div>
+  </section>
+
+  <section id="panel-login" class="tab-panel" aria-hidden="true">
+    <div class="hero-card" style="max-width:520px">
+    <div style="font-weight:800">Iniciar sesión</div>
+    <form id="loginForm" style="margin-top:.8rem">
+      <div class="form-row">
+      <label style="color:var(--muted)">Correo electrónico</label>
+      <input type="email" id="loginEmail" placeholder="tucorreo@ejemplo.com" required>
+      </div>
+      <div class="form-row">
+      <label style="color:var(--muted)">Contraseña</label>
+      <input type="password" id="loginPass" placeholder="Contraseña" required>
+      </div>
+      <div style="display:flex;gap:.5rem">
+      <button class="btn" type="submit">Entrar</button>
+      <button class="btn secondary" type="button" id="goRegister">Crear cuenta</button>
+      </div>
+      <div id="loginMsg" style="margin-top:.6rem;color:var(--muted)"></div>
+    </form>
+    </div>
+  </section>
+
+  <section id="panel-registrar" class="tab-panel" aria-hidden="true">
+    <div class="hero-card" style="max-width:520px">
+    <div style="font-weight:800">Crear cuenta</div>
+    <form id="registerForm" style="margin-top:.8rem">
+      <div class="form-row">
+      <label style="color:var(--muted)">Nombre</label>
+      <input type="text" id="regName" placeholder="Tu nombre" required>
+      </div>
+      <div class="form-row">
+      <label style="color:var(--muted)">Correo electrónico</label>
+      <input type="email" id="regEmail" placeholder="tucorreo@ejemplo.com" required>
+      </div>
+      <div class="form-row">
+      <label style="color:var(--muted)">Contraseña</label>
+      <input type="password" id="regPass" placeholder="Contraseña" required>
+      </div>
+      <div style="display:flex;gap:.5rem">
+      <button class="btn" type="submit">Registrar</button>
+      <button class="btn secondary" type="button" id="goLogin">Volver a entrar</button>
+      </div>
+      <div id="registerMsg" style="margin-top:.6rem;color:var(--muted)"></div>
+    </form>
+    </div>
+  </section>
+
+  <section id="panel-confirmacion" class="tab-panel" aria-hidden="true">
+    <div class="hero-card">
+    <div style="font-weight:800">Confirmación de compra</div>
+    <div id="confirmContent" style="color:var(--muted);margin-top:.5rem">Aquí aparecerá la confirmación después de completar la compra.</div>
+    </div>
+  </section>
+  </main>
+
+  <footer>
+  <div style="color:var(--muted)">© <span id="year"></span> CineNova — Todos los derechos reservados</div>
+  <div style="color:var(--muted)">Términos • Privacidad • Ayuda</div>
+  </footer>
+
+  <!-- Booking Modal -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal" role="document">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+    <div style="font-weight:800" id="modalTitle">Reserva</div>
+    <button class="close" id="closeModal" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="modal-grid">
+    <div style="background:linear-gradient(180deg,#0d1624,#071021);padding:.6rem;border-radius:8px">
+      <div id="modalPoster" style="height:280px;border-radius:8px;background:linear-gradient(180deg,#13213a,#071022);display:grid;place-items:center;font-weight:800"></div>
+    </div>
+    <div>
+      <div id="modalInfo" style="color:var(--muted)"></div>
+      <div style="margin-top:.6rem">
+      <div style="font-weight:800">Selecciona función</div>
+      <div id="modalTimes" class="time-list"></div>
+
+      <!-- Seats map -->
+      <div id="seatContainer" style="margin-top:.6rem">
+        <div style="font-weight:800">Selecciona butacas</div>
+        <div id="seatMap" class="seat-map" aria-live="polite"></div>
+        <div class="seat-legend">
+          <div class="legend-item"><div class="legend-box" style="background:linear-gradient(135deg,#ff7b7b,#ff3d6b);width:18px;height:18px;border-radius:4px"></div><div>Seleccionada</div></div>
+          <div class="legend-item"><div class="legend-box" style="background:#2b2b2b;width:18px;height:18px;border-radius:4px"></div><div>Reservada</div></div>
+          <div class="legend-item"><div class="legend-box" style="background:linear-gradient(180deg,#0d2238,#071021);border:1px solid rgba(255,255,255,0.04);width:18px;height:18px;border-radius:4px"></div><div>Disponible</div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:.75rem;display:flex;gap:.6rem;align-items:center">
+        <div style="font-weight:700">Entradas</div>
+        <select id="ticketCount" style="background:transparent;border:1px solid rgba(255,255,255,0.03);padding:.35rem;border-radius:8px;color:var(--muted)">
+        <option>1</option><option>2</option><option>3</option><option>4</option>
+        </select>
+        <button class="btn" id="confirmBuy">Confirmar</button>
+      </div>
+      <div id="bookingMessage" style="margin-top:.6rem;color:var(--muted)"></div>
+      </div>
+    </div>
+    </div>
+  </div>
+  </div>
+
+  <script>
+  // ------------------------
+  // Datos de ejemplo
+  // ------------------------
+  // Incluye The Batman, Nosferatu, One Battle After Another
+  let movies = [
+    { id:1, title:"Starling Skies", title_es:"Cielos Estelares", genre:"Acción", rating: "PG-13", runtime: "2h 10m", score: "8.1", desc:"Una aventura espacial llena de acción y efectos deslumbrantes.", times:["12:30","15:45","19:00","22:20"], featured:true, upcoming:false },
+    { id:2, title:"The Last Lantern", title_es:"La Última Linterna", genre:"Drama", rating: "PG", runtime: "1h 55m", score: "7.5", desc:"Una historia íntima sobre familia y reconciliación.", times:["11:00","14:00","18:30"], featured:false, upcoming:false },
+    { id:3, title:"Pixel Pals", title_es:"Amigos Pixelados", genre:"Animación", rating: "G", runtime: "1h 30m", score: "7.9", desc:"Un viaje animado y emotivo para todas las edades.", times:["10:00","12:45","16:00","18:15"], featured:true, upcoming:false },
+    { id:4, title:"Night Howl", title_es:"Aullido Nocturno", genre:"Terror", rating: "R", runtime: "1h 45m", score: "6.8", desc:"Un thriller tenso que te mantendrá en vilo.", times:["20:30","22:45"], featured:false, upcoming:false },
+    { id:5, title:"Ocean's Drift", title_es:"Deriva Oceánica", genre:"Acción", rating: "PG-13", runtime: "2h", score: "7.0", desc:"Acción marítima y rescates audaces.", times:["13:15","16:30","19:30"], featured:false, upcoming:false },
+    { id:6, title:"The Batman", title_es:"The Batman", genre:"Acción", rating:"R", runtime:"2h 55m", score:"8.3", desc:"Detective noir en la oscura ciudad, una mirada cruda al vigilante.", times:["17:00","20:10","23:30"], featured:true, upcoming:false },
+    { id:7, title:"Nosferatu", title_es:"Nosferatu", genre:"Terror", rating:"R", runtime:"1h 46m", score:"7.6", desc:"Una reinterpretación del clásico del horror.", times:[], featured:false, upcoming:true },
+    { id:8, title:"One Battle After Another", title_es:"Una Batalla Tras Otra", genre:"Acción", rating:"PG-13", runtime:"2h 20m", score:"7.2", desc:"Acción intensa y coreografías a gran escala.", times:[], featured:false, upcoming:true }
+  ];
+
+  // Add reserved seats storage for each movie (per time)
+  movies.forEach(m=>{
+    m.reserved = m.reserved || {}; // object mapping time -> array of seatIds
+    (m.times||[]).forEach(t=>{
+      if(!m.reserved[t]) m.reserved[t] = []; // initialize empty array
+    });
+  });
+
+  // ------------------------
+  // Referencias DOM
+  // ------------------------
+  const moviesRow = document.getElementById('moviesRow');
+  const upcomingRow = document.getElementById('upcomingRow');
+  const nowCount = document.getElementById('nowCount');
+  const heroFeatured = document.getElementById('heroFeatured');
+  const year = document.getElementById('year');
+  const overlay = document.getElementById('overlay');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalPoster = document.getElementById('modalPoster');
+  const modalInfo = document.getElementById('modalInfo');
+  const modalTimes = document.getElementById('modalTimes');
+  const bookingMessage = document.getElementById('bookingMessage');
+  const ticketCount = document.getElementById('ticketCount');
+  const confirmBuy = document.getElementById('confirmBuy');
+  const closeModal = document.getElementById('closeModal');
+  const search = document.getElementById('search');
+  const genreFilter = document.getElementById('genreFilter');
+  const detailContent = document.getElementById('detailContent');
+  const confirmContent = document.getElementById('confirmContent');
+  const seatMapEl = document.getElementById('seatMap');
+
+  year.textContent = new Date().getFullYear();
+
+  // ------------------------
+  // Helpers / Posters
+  // ------------------------
+  function posterSVG(title){
+    const initials = (title||'').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+    return `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font-size:28px">
+    <div style="width:84px;height:84px;border-radius:12px;background:linear-gradient(135deg,#ff6b8a,#7a5cff);display:grid;place-items:center;font-weight:900">${initials}</div>
+    </div>`;
+  }
+
+  // ------------------------
+  // Card renderer
+  // ------------------------
+  function cardElement(m, showTimes = true){
+    const titleDisplay = m.title_es || m.title;
+    const wrapper = document.createElement('article');
+    wrapper.className = 'card';
+    wrapper.dataset.id = m.id;
+
+    const timesHtml = showTimes && (m.times||[]).length
+    ? (m.times||[]).slice(0,6).map(t=>`<button class="time-btn" data-id="${m.id}" data-time="${t}">${t}</button>`).join('')
+    : '';
+
+    wrapper.innerHTML = `
+    <div class="thumb" aria-hidden>${posterSVG(m.title)}</div>
+    <h3>${titleDisplay}</h3>
+    <div class="meta"><span class="rating">${m.score}</span><span>${m.genre}</span><span>${m.runtime}</span></div>
+    <p style="color:var(--muted);margin-top:.45rem;font-size:.92rem">${m.desc}</p>
+    ${ timesHtml ? `<div class="showtimes" style="margin-top:.6rem">${timesHtml}</div>` : (m.upcoming ? `<div style="margin-top:.6rem;color:var(--muted);font-size:.9rem">Próximamente — funciones por anunciar</div>` : '') }
+    `;
+    return wrapper;
+  }
+
+  // ------------------------
+  // Render rows: available + upcoming
+  // ------------------------
+  function renderRows(filteredAvailable, filteredUpcoming){
+    moviesRow.innerHTML = '';
+    filteredAvailable.forEach(m=>{
+      moviesRow.appendChild(cardElement(m, true));
+    });
+    upcomingRow.innerHTML = '';
+    filteredUpcoming.forEach(m=>{
+      upcomingRow.appendChild(cardElement(m, false));
+    });
+  }
+
+  // ------------------------
+  // Hero rendering
+  // ------------------------
+  let featuredIndex = 0;
+  function featuredList(){ return movies.filter(m=>m.featured); }
+
+  function renderHero(){
+    const list = featuredList();
+    if(list.length===0){
+      heroFeatured.innerHTML = `<div style="color:var(--muted)">No hay destacados</div>`;
+      return;
+    }
+    if(featuredIndex >= list.length) featuredIndex = 0;
+    if(featuredIndex < 0) featuredIndex = list.length - 1;
+    const featured = list[featuredIndex];
+    const titleDisplay = featured.title_es || featured.title;
+    heroFeatured.innerHTML = `
+    <div class="poster" aria-hidden>${posterSVG(featured.title)}</div>
+    <div class="movie-info">
+      <h2>${titleDisplay}</h2>
+      <p>${featured.desc}</p>
+      <div style="margin-top:.4rem" class="meta"><span class="rating">${featured.score}</span><span>${featured.genre}</span><span>${featured.runtime}</span></div>
+    </div>
+    `;
+  }
+
+  // ------------------------
+  // Show details panel
+  // ------------------------
+  function showDetails(movie){
+    if(!movie) return;
+    const titleDisplay = movie.title_es || movie.title;
+    if(movie.upcoming){
+      detailContent.innerHTML = `<div style="font-weight:800">${titleDisplay} — Próximamente</div>
+        <div style="color:var(--muted);margin-top:.35rem">${movie.desc}</div>
+        <div style="margin-top:.5rem" class="meta"><span class="rating">${movie.score}</span><span>${movie.genre}</span><span>${movie.runtime}</span></div>
+        <div style="margin-top:.6rem;color:var(--muted);font-size:.9rem">Esta película está marcada como "Próximamente". Las funciones y reservas se habilitarán en una fecha posterior.</div>`;
+    } else {
+      const timesHtml = (movie.times||[]).map(t=>`<button class="time-btn" data-id="${movie.id}" data-time="${t}">${t}</button>`).join('');
+      detailContent.innerHTML = `<div style="font-weight:800">${titleDisplay}</div>
+        <div style="color:var(--muted);margin-top:.35rem">${movie.desc}</div>
+        <div style="margin-top:.5rem" class="meta"><span class="rating">${movie.score}</span><span>${movie.genre}</span><span>${movie.runtime}</span></div>
+        <div style="margin-top:.6rem"><div style="font-weight:800">Funciones</div><div class="time-list" style="margin-top:.35rem">${timesHtml}</div></div>
+        <div style="margin-top:.6rem;color:var(--muted);font-size:.9rem">Haga click en una hora para reservar inmediatamente.</div>`;
+    }
+    activateTabByPanel('panel-detalles');
+    document.getElementById('panel-detalles').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  // ------------------------
+  // Seats logic
+  // ------------------------
+  // current selection in modal
+  let currentModal = { movieId: null, time: null };
+  let selectedSeats = []; // array of seat ids currently selected in modal
+
+  // create seat ids rows A-E and cols 1-8
+  const SEAT_ROWS = ['A','B','C','D','E'];
+  const SEAT_COLS = 8;
+
+  function renderSeatMap(movieId, time){
+    seatMapEl.innerHTML = '';
+    const movie = movies.find(m=>m.id==movieId);
+    if(!movie || movie.upcoming || !time){ seatMapEl.innerHTML = '<div style="color:var(--muted);margin-top:.4rem">Selecciona una función válida para ver butacas.</div>'; return; }
+    const reserved = movie.reserved && movie.reserved[time] ? movie.reserved[time] : [];
+    // build grid
+    SEAT_ROWS.forEach(row=>{
+      for(let c=1;c<=SEAT_COLS;c++){
+        const seatId = `${row}${c}`;
+        const btn = document.createElement('button');
+        btn.className = 'seat';
+        btn.type = 'button';
+        btn.dataset.seat = seatId;
+        btn.dataset.id = movieId;
+        btn.dataset.time = time;
+        btn.textContent = seatId;
+        if(reserved.includes(seatId)){
+          btn.classList.add('reserved');
+          btn.disabled = true;
+        } else if(selectedSeats.includes(seatId)){
+          btn.classList.add('selected');
+        }
+        seatMapEl.appendChild(btn);
+      }
+    });
+  }
+
+  // ------------------------
+  // Modal open/close
+  // ------------------------
+  function openModal(movieId, time){
+    const m = movies.find(x=>x.id==movieId);
+    if(!m) return;
+    if(m.upcoming){
+      bookingMessage.textContent = 'Esta película es próximamente — no tiene funciones disponibles.';
+      return;
+    }
+    currentModal.movieId = movieId;
+    currentModal.time = time || (m.times && m.times[0]);
+    selectedSeats = []; // reset selection each open
+    const titleDisplay = m.title_es || m.title;
+    modalTitle.textContent = `${titleDisplay} — ${currentModal.time || ''}`;
+    modalPoster.innerHTML = posterSVG(m.title);
+    modalInfo.innerHTML = `<div style="font-weight:800">${titleDisplay}</div><div style="color:var(--muted);margin-top:.35rem">${m.desc}</div>`;
+    modalTimes.innerHTML = (m.times||[]).map(t=>`<button class="time-btn" data-time="${t}" data-id="${m.id}">${t}</button>`).join('');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+    bookingMessage.textContent = '';
+    ticketCount.value = "1";
+    // ensure reserved map has the time
+    m.reserved = m.reserved || {};
+    if(currentModal.time && !m.reserved[currentModal.time]) m.reserved[currentModal.time] = [];
+    renderSeatMap(movieId, currentModal.time);
+  }
+
+  function closeModalFunc(){
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden','true');
+    currentModal = { movieId: null, time: null };
+    selectedSeats = [];
+  }
+
+  // ------------------------
+  // Global click handling (delegation)
+  // ------------------------
+  document.body.addEventListener('click', e=>{
+    // If clicked a card anywhere -> show details (cards for upcoming will show non-bookable details)
+    const card = e.target.closest('.card');
+    if(card && !e.target.classList.contains('time-btn')){
+      const id = Number(card.dataset.id);
+      const m = movies.find(x=>x.id===id);
+      if(m) showDetails(m);
+      return;
+    }
+
+    // Click on time buttons (in cards, details or modal) -> open modal or highlight
+    const timeBtn = e.target.closest('.time-btn');
+    if(timeBtn){
+      const id = Number(timeBtn.dataset.id);
+      const t = timeBtn.dataset.time;
+      const parent = timeBtn.parentElement;
+      if(parent){
+        Array.from(parent.querySelectorAll('.time-btn')).forEach(b=>b.style.borderColor='rgba(255,255,255,0.04)');
+      }
+      timeBtn.style.borderColor = 'var(--accent)';
+      if(!timeBtn.closest('.modal')){
+        openModal(id, t);
+      } else {
+        // time clicked inside modal: change seat map for that time
+        const mid = Number(timeBtn.dataset.id);
+        currentModal.movieId = mid;
+        currentModal.time = t;
+        selectedSeats = [];
+        renderSeatMap(mid, t);
+      }
+      return;
+    }
+
+    // Seat click inside modal (delegated)
+    const seatBtn = e.target.closest('.seat');
+    if(seatBtn && seatBtn.dataset.seat){
+      if(seatBtn.classList.contains('reserved')) return; // cannot toggle reserved
+      const seatId = seatBtn.dataset.seat;
+      const index = selectedSeats.indexOf(seatId);
+      if(index >= 0){
+        selectedSeats.splice(index,1);
+        seatBtn.classList.remove('selected');
+      } else {
+        // optional: limit by ticketCount
+        const max = Number(ticketCount.value || 1);
+        if(selectedSeats.length >= max){
+          // replace oldest selection with new (simple behavior) or deny — here deny and notify
+          bookingMessage.textContent = `Selecciona máximo ${max} butaca(s).`;
+          setTimeout(()=> bookingMessage.textContent = '', 1400);
+          return;
+        }
+        selectedSeats.push(seatId);
+        seatBtn.classList.add('selected');
+      }
+      return;
+    }
+
+    // Quick actions: confirm purchase
+    if(e.target.id === 'confirmBuy'){
+      if(!currentModal.movieId || !currentModal.time){
+        bookingMessage.textContent = 'Seleccione función antes de confirmar.';
+        return;
+      }
+      const movie = movies.find(m=>m.id === currentModal.movieId);
+      if(!movie){ bookingMessage.textContent = 'Película no encontrada.'; return; }
+      if(selectedSeats.length === 0){
+        bookingMessage.textContent = 'Debe seleccionar al menos una butaca.';
+        return;
+      }
+      // ensure reserved array exists
+      movie.reserved = movie.reserved || {};
+      if(!movie.reserved[currentModal.time]) movie.reserved[currentModal.time] = [];
+      // check if any seat got reserved meanwhile
+      const conflict = selectedSeats.filter(s => movie.reserved[currentModal.time].includes(s));
+      if(conflict.length){
+        bookingMessage.textContent = `Las butacas ${conflict.join(', ')} ya están reservadas. Actualiza la selección.`;
+        renderSeatMap(movie.id, currentModal.time);
+        selectedSeats = [];
+        return;
+      }
+      bookingMessage.textContent = 'Procesando...';
+      setTimeout(()=>{
+        // add selected seats to reserved list (avoid duplicates)
+        selectedSeats.forEach(s=>{
+          if(!movie.reserved[currentModal.time].includes(s)) movie.reserved[currentModal.time].push(s);
+        });
+        bookingMessage.textContent = `¡Butacas reservadas: ${selectedSeats.join(', ')}! Confirmación enviada (demo).`;
+        confirmContent.innerHTML = `<div style="font-weight:800">Compra realizada</div><div style="color:var(--muted);margin-top:.4rem">Se han reservado tus butacas: ${selectedSeats.join(', ')} (Demo)</div>`;
+        // clear selection and update seat map
+        selectedSeats = [];
+        renderSeatMap(movie.id, currentModal.time);
+        activateTabByPanel('panel-confirmacion');
+        closeModalFunc();
+      },900);
+      return;
+    }
+
+    // Hero quick open
+    if(e.target.id === 'viewNow'){
+      const available = movies.filter(m=>!m.upcoming);
+      const first = available[0] || movies[0];
+      if(first) showDetails(first);
+      window.scrollTo({top:document.querySelector('main').offsetTop-60,behavior:'smooth'});
+      return;
+    }
+
+    if(e.target.id === 'browse'){
+      activateTabByPanel('panel-peliculas');
+      window.scrollTo({top:document.querySelector('main').offsetTop-40,behavior:'smooth'});
+      return;
+    }
+
+    if(e.target.id === 'quickBookFeatured'){
+      const featured = featuredList()[0] || movies[0];
+      // open modal for first available time
+      const t = (featured.times||[])[0];
+      if(!t){
+        bookingMessage.textContent = 'La película destacada no tiene funciones disponibles.';
+        return;
+      }
+      openModal(featured.id, t);
+      return;
+    }
+
+    // close modal by clicking overlay or close button
+    if(e.target === closeModal || e.target === overlay){
+      closeModalFunc();
+      return;
+    }
+
+    // nav links that have data-tab attribute
+    const navLink = e.target.closest('[data-tab]');
+    if(navLink && navLink.dataset.tab){
+      const map = {
+        'peliculas':'panel-peliculas',
+        'proximamente':'panel-proximas',
+        'ofertas':'panel-ofertas'
+      };
+      const panel = map[navLink.dataset.tab] || 'panel-peliculas';
+      activateTabByPanel(panel);
+      e.preventDefault();
+    }
+  });
+
+  // keyboard escape to close modal
+  document.addEventListener('keydown', e=>{
+    if(e.key === 'Escape') closeModalFunc();
+  });
+
+  // ------------------------
+  // Search + filtro
+  // ------------------------
+  function applyFilters(){
+    const q = search.value.trim().toLowerCase();
+    const genre = genreFilter.value;
+    const filtered = movies.filter(m=>{
+      const title = (m.title_es || m.title).toLowerCase();
+      const matchQ = !q || title.includes(q) || (m.desc||'').toLowerCase().includes(q);
+      const matchG = !genre || m.genre===genre;
+      return matchQ && matchG;
+    });
+    const available = filtered.filter(m=>!m.upcoming);
+    const upcoming = filtered.filter(m=>m.upcoming);
+    renderRows(available, upcoming);
+    nowCount.textContent = `${available.length} títulos`;
+  }
+
+  search.addEventListener('input', applyFilters);
+  genreFilter.addEventListener('change', applyFilters);
+
+  // ------------------------
+  // Inicializa vistas
+  // ------------------------
+  function initRender(){
+    const available = movies.filter(m=>!m.upcoming);
+    const upcoming = movies.filter(m=>m.upcoming);
+    renderRows(available, upcoming);
+    nowCount.textContent = `${available.length} títulos`;
+    renderHero();
+  }
+  initRender();
+
+  // ------------------------
+  // Tabs logic
+  // ------------------------
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  tabButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=> {
+      const panel = btn.dataset.panel;
+      activateTabByPanel(panel);
+    });
+  });
+
+  function activateTabByPanel(panelId){
+    tabButtons.forEach(b=>{
+      if(b.dataset.panel === panelId){
+        b.classList.add('active');
+        b.setAttribute('aria-selected','true');
+      } else {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected','false');
+      }
+    });
+    document.querySelectorAll('.tab-panel').forEach(p=>{
+      if(p.id === panelId){
+        p.classList.add('active');
+        p.removeAttribute('aria-hidden');
+        p.scrollIntoView({behavior:'smooth', block:'start'});
+      } else {
+        p.classList.remove('active');
+        p.setAttribute('aria-hidden','true');
+      }
+    });
+    if(panelId === 'panel-proximas'){
+      const upcoming = movies.filter(m=>m.upcoming);
+      renderRows(movies.filter(m=>!m.upcoming), upcoming);
+    }
+  }
+
+  // ------------------------
+  // Forms: login & register (demo)
+  // ------------------------
+  document.getElementById('loginForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    document.getElementById('loginMsg').textContent = 'Iniciando sesión...';
+    setTimeout(()=>{ document.getElementById('loginMsg').textContent = 'Sesión iniciada (demo).'; activateTabByPanel('panel-peliculas'); },800);
+  });
+
+  document.getElementById('registerForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    document.getElementById('registerMsg').textContent = 'Creando cuenta...';
+    setTimeout(()=>{ document.getElementById('registerMsg').textContent = 'Cuenta creada (demo).'; activateTabByPanel('panel-login'); },900);
+  });
+
+  document.getElementById('goRegister').addEventListener('click', ()=> activateTabByPanel('panel-registrar'));
+  document.getElementById('goLogin').addEventListener('click', ()=> activateTabByPanel('panel-login'));
+
+  // accessibility: trap focus inside modal when open (básico)
+  overlay.addEventListener('keydown', e=>{
+    if(e.key==='Tab'){
+      const focusable = overlay.querySelectorAll('button, [href], input, select, textarea');
+      if(focusable.length===0) return;
+      const first = focusable[0], last = focusable[focusable.length-1];
+      if(e.shiftKey && document.activeElement===first){ last.focus(); e.preventDefault(); }
+      else if(!e.shiftKey && document.activeElement===last){ first.focus(); e.preventDefault(); }
+    }
+  });
+
+  // Hero controls
+  document.getElementById('heroPrev').addEventListener('click', ()=>{
+    featuredIndex--;
+    renderHero();
+  });
+  document.getElementById('heroNext').addEventListener('click', ()=>{
+    featuredIndex++;
+    renderHero();
+  });
+
+  // Simple horizontal scroll controls for moviesRow (wheel support)
+  moviesRow.addEventListener('wheel', e=>{
+    if(Math.abs(e.deltaX) < Math.abs(e.deltaY)){
+      moviesRow.scrollLeft += e.deltaY;
+      e.preventDefault();
+    }
+  });
+
+  // Modal time selection inside modal (delegated)
+  modalTimes.addEventListener('click', e=>{
+    const b = e.target.closest('.time-btn');
+    if(!b) return;
+    Array.from(modalTimes.querySelectorAll('.time-btn')).forEach(x=>x.style.borderColor='rgba(255,255,255,0.04)');
+    b.style.borderColor = 'var(--accent)';
+    // change seatmap to selected time
+    const id = Number(b.dataset.id);
+    const t = b.dataset.time;
+    currentModal.movieId = id;
+    currentModal.time = t;
+    selectedSeats = [];
+    renderSeatMap(id, t);
+  });
+
+  // Initialize filter input listeners and first render
+  applyFilters();
+  </script>
+</body>
+</html>
