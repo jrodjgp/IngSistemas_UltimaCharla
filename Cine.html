@@ -3,31 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CineNova — Películas y Funciones</title>
+  <title>CineMoh — Películas y Funciones</title>
   <style>
     :root{
-      --bg:#030406;
-      --card:#0b1220;
-      --accent:#ff3d3d;
-      --muted:#98a0b3;
-      --glass: rgba(255,255,255,0.03);
+      --bg:#050306;
+      --card:#12060a;
+      --accent:#ff4b57;
+      --muted:#bdb0b0;
+      --glass: rgba(255,75,87,0.04);
       --radius:12px;
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       color-scheme: dark;
     }
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071021 0%,var(--bg) 100%); color:#e6eef8}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#12040a 0%,var(--bg) 100%); color:#f0e9ea}
     a{color:inherit;text-decoration:none}
     header{
       display:flex;align-items:center;justify-content:space-between;
-      gap:1rem;padding:1rem 1.25rem;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-      position:sticky;top:0;backdrop-filter: blur(6px);z-index:20;border-bottom:1px solid rgba(255,255,255,0.03)
+      gap:1rem;padding:1rem 1.25rem;background:linear-gradient(180deg, rgba(255,75,87,0.02), transparent);
+      position:sticky;top:0;backdrop-filter: blur(6px);z-index:20;border-bottom:1px solid rgba(255,75,87,0.03)
     }
     .brand{display:flex;align-items:center;gap:.75rem;font-weight:700;font-size:1.125rem}
     .logo{
       width:44px;height:44px;border-radius:10px;background:
-      radial-gradient(circle at 30% 30%, #ffd6e0 0%, transparent 18%),
-      linear-gradient(135deg,#ff6b8a, #ff3d6b 60%);display:flex;align-items:center;justify-content:center;
-      box-shadow:0 6px 20px rgba(255,61,107,0.12);flex:0 0 44px;color:#0b0a0d;font-weight:800
+      radial-gradient(circle at 30% 30%, #ffd6d8 0%, transparent 18%),
+      linear-gradient(135deg,#ff6b6b, #b22222 60%);display:flex;align-items:center;justify-content:center;
+      box-shadow:0 6px 20px rgba(255,75,87,0.12);flex:0 0 44px;color:#0b0a0d;font-weight:800
     }
     nav{display:flex;gap:0.5rem;align-items:center}
     .nav-links{display:flex;gap:.5rem}
@@ -39,7 +39,7 @@
       padding:2rem 1.25rem 1.5rem;display:grid;grid-template-columns:1fr 360px;gap:1rem;align-items:start;
     }
     .hero-card{
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      background:linear-gradient(180deg, rgba(255,75,87,0.02), rgba(255,75,87,0.01));
       border-radius:var(--radius);padding:1.25rem;min-height:220px;box-shadow:0 10px 30px rgba(3,10,18,0.6);
       overflow:hidden;position:relative
     }
@@ -48,32 +48,32 @@
     }
     .poster{
       width:140px;height:200px;border-radius:8px;flex:0 0 140px;overflow:hidden;
-      background:linear-gradient(180deg,#2a2f47,#0b1220);display:grid;place-items:center;color:#fff;font-weight:700;
+      background:linear-gradient(180deg,#30161a,#12060a);display:grid;place-items:center;color:#fff;font-weight:700;
       box-shadow:0 8px 24px rgba(0,0,0,0.6)
     }
     .movie-info h2{margin:0 0 .35rem 0;font-size:1.25rem}
     .movie-info p{margin:0;color:var(--muted);font-size:.95rem}
     .cta{margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap}
     .btn{background:var(--accent);border:0;color:white;padding:.6rem .9rem;border-radius:10px;font-weight:700;cursor:pointer}
-    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);font-weight:600}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,75,87,0.06);color:var(--muted);font-weight:600}
     .sidebar{
-      padding:1rem;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      padding:1rem;background:linear-gradient(180deg, rgba(255,75,87,0.01), transparent);
       border-radius:var(--radius);min-height:220px
     }
     main{padding:1rem 1.25rem}
     .section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
     .movies-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
     .movies-row{display:flex;gap:1rem;overflow:auto;padding-bottom:.25rem}
-    .card{background:var(--card);border-radius:12px;padding:0.8rem;overflow:hidden;border:1px solid rgba(255,255,255,0.02);min-width:200px;flex:0 0 200px;cursor:pointer}
-    .card .thumb{height:240px;border-radius:8px;background:linear-gradient(180deg,#162033,#071021);display:flex;align-items:end;padding:.6rem}
+    .card{background:var(--card);border-radius:12px;padding:0.8rem;overflow:hidden;border:1px solid rgba(255,75,87,0.02);min-width:200px;flex:0 0 200px;cursor:pointer}
+    .card .thumb{height:240px;border-radius:8px;background:linear-gradient(180deg,#24121a,#12060a);display:flex;align-items:end;padding:.6rem}
     .card h3{margin:.6rem 0 0 0;font-size:1rem}
     .meta{display:flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.9rem;margin-top:.35rem}
     .showtimes{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.6rem}
     .chip{background:transparent;border:1px solid rgba(255,255,255,0.03);padding:.35rem .5rem;border-radius:8px;font-weight:600;color:var(--muted);cursor:pointer}
-    footer{padding:1.25rem;background:transparent;border-top:1px solid rgba(255,255,255,0.03);display:flex;justify-content:space-between;align-items:center}
-    .overlay{position:fixed;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.8));display:none;align-items:center;justify-content:center;z-index:50}
+    footer{padding:1.25rem;background:transparent;border-top:1px solid rgba(255,75,87,0.03);display:flex;justify-content:space-between;align-items:center}
+    .overlay{position:fixed;inset:0;background:linear-gradient(180deg, rgba(23,6,8,0.6), rgba(10,4,6,0.85));display:none;align-items:center;justify-content:center;z-index:50}
     .overlay.open{display:flex}
-    .modal{background:linear-gradient(180deg,#081426,#071022);padding:1rem;border-radius:12px;width:min(880px,96%);box-shadow:0 18px 60px rgba(2,6,23,0.8)}
+    .modal{background:linear-gradient(180deg,#14060b,#12060a);padding:1rem;border-radius:12px;width:min(880px,96%);box-shadow:0 18px 60px rgba(2,6,23,0.8)}
     .modal-grid{display:grid;grid-template-columns:220px 1fr;gap:1rem}
     .time-list{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
     .time-btn{padding:.5rem .7rem;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);cursor:pointer;color:var(--muted);font-weight:700}
@@ -93,14 +93,14 @@
       header{padding:.6rem .8rem}
       .card{min-width:150px}
     }
-    .rating{background:linear-gradient(90deg,#ffd86b,#ffb05b);padding:.25rem .45rem;border-radius:6px;font-weight:800;color:#081426}
+    .rating{background:linear-gradient(90deg,#ff9b9b,#ff4b57);padding:.25rem .45rem;border-radius:6px;font-weight:800;color:#12060a}
     .carousel-controls{display:flex;gap:.5rem;align-items:center}
 
     /* Seat map styles */
     .seat-map{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-top:.6rem}
-    .seat{background:linear-gradient(180deg,#0d2238,#071021);border:1px solid rgba(255,255,255,0.04);height:36px;border-radius:6px;display:grid;place-items:center;cursor:pointer;color:var(--muted);font-weight:700}
+    .seat{background:linear-gradient(180deg,#231219,#12060a);border:1px solid rgba(255,255,255,0.04);height:36px;border-radius:6px;display:grid;place-items:center;cursor:pointer;color:var(--muted);font-weight:700}
     .seat.reserved{background:#2b2b2b;color:#8a8a8a;cursor:not-allowed;opacity:.7;border-color:rgba(255,0,0,0.12)}
-    .seat.selected{background:linear-gradient(135deg,#ff7b7b,#ff3d6b);color:#081426;border-color:var(--accent)}
+    .seat.selected{background:linear-gradient(135deg,#ff7b7b,#ff4b57);color:#12060a;border-color:var(--accent)}
     .seat-legend{display:flex;gap:.6rem;align-items:center;margin-top:.6rem;color:var(--muted);font-size:.9rem}
     .legend-item{display:flex;gap:.4rem;align-items:center}
     .legend-box{width:18px;height:18px;border-radius:4px}
@@ -109,9 +109,9 @@
 <body>
   <header>
   <div class="brand">
-    <div class="logo" aria-hidden>CN</div>
+    <div class="logo" aria-hidden>CM</div>
     <div>
-    <div style="font-weight:800">CineNova</div>
+    <div style="font-weight:800">CineMoh</div>
     <div style="font-size:.75rem;color:var(--muted);margin-top:2px">Películas • Funciones • Entradas</div>
     </div>
   </div>
@@ -178,7 +178,7 @@
     <div style="margin-top:.9rem;display:flex;flex-direction:column;gap:.6rem">
     <div style="display:flex;justify-content:space-between;align-items:center">
       <div style="display:flex;gap:.6rem;align-items:center">
-      <div style="width:56px;height:80px;border-radius:8px;background:linear-gradient(180deg,#1b2540,#071022)"></div>
+      <div style="width:56px;height:80px;border-radius:8px;background:linear-gradient(180deg,#2a1014,#12060a)"></div>
       <div>
         <div style="font-weight:700">La Carrera de Medianoche</div>
         <div style="color:var(--muted);font-size:.85rem">20:30 • Sala 3</div>
@@ -189,7 +189,7 @@
 
     <div style="display:flex;justify-content:space-between;align-items:center">
       <div style="display:flex;gap:.6rem;align-items:center">
-      <div style="width:56px;height:80px;border-radius:8px;background:linear-gradient(180deg,#1b2540,#071022)"></div>
+      <div style="width:56px;height:80px;border-radius:8px;background:linear-gradient(180deg,#2a1014,#12060a)"></div>
       <div>
         <div style="font-weight:700">Deriva Oceánica</div>
         <div style="color:var(--muted);font-size:.85rem">18:00 • Sala 1</div>
@@ -323,7 +323,7 @@
   </main>
 
   <footer>
-  <div style="color:var(--muted)">© <span id="year"></span> CineNova — Todos los derechos reservados</div>
+  <div style="color:var(--muted)">© <span id="year"></span> CineMoh — Todos los derechos reservados</div>
   <div style="color:var(--muted)">Términos • Privacidad • Ayuda</div>
   </footer>
 
@@ -335,8 +335,8 @@
     <button class="close" id="closeModal" aria-label="Cerrar">✕</button>
     </div>
     <div class="modal-grid">
-    <div style="background:linear-gradient(180deg,#0d1624,#071021);padding:.6rem;border-radius:8px">
-      <div id="modalPoster" style="height:280px;border-radius:8px;background:linear-gradient(180deg,#13213a,#071022);display:grid;place-items:center;font-weight:800"></div>
+    <div style="background:linear-gradient(180deg,#12060a,#0b0406);padding:.6rem;border-radius:8px"></div>
+      <div id="modalPoster" style="height:280px;border-radius:8px;background:linear-gradient(180deg,#331017,#12060a);display:grid;place-items:center;font-weight:800"></div>
     </div>
     <div>
       <div id="modalInfo" style="color:var(--muted)"></div>
@@ -349,9 +349,9 @@
         <div style="font-weight:800">Selecciona butacas</div>
         <div id="seatMap" class="seat-map" aria-live="polite"></div>
         <div class="seat-legend">
-          <div class="legend-item"><div class="legend-box" style="background:linear-gradient(135deg,#ff7b7b,#ff3d6b);width:18px;height:18px;border-radius:4px"></div><div>Seleccionada</div></div>
+          <div class="legend-item"><div class="legend-box" style="background:linear-gradient(135deg,#ff7b7b,#ff4b57);width:18px;height:18px;border-radius:4px"></div><div>Seleccionada</div></div>
           <div class="legend-item"><div class="legend-box" style="background:#2b2b2b;width:18px;height:18px;border-radius:4px"></div><div>Reservada</div></div>
-          <div class="legend-item"><div class="legend-box" style="background:linear-gradient(180deg,#0d2238,#071021);border:1px solid rgba(255,255,255,0.04);width:18px;height:18px;border-radius:4px"></div><div>Disponible</div></div>
+          <div class="legend-item"><div class="legend-box" style="background:linear-gradient(180deg,#231219,#12060a);border:1px solid rgba(255,255,255,0.04);width:18px;height:18px;border-radius:4px"></div><div>Disponible</div></div>
         </div>
       </div>
 
@@ -375,14 +375,14 @@
   // ------------------------
   // Incluye The Batman, Nosferatu, One Battle After Another
   let movies = [
-    { id:1, title:"Starling Skies", title_es:"Cielos Estelares", genre:"Acción", rating: "PG-13", runtime: "2h 10m", score: "8.1", desc:"Una aventura espacial llena de acción y efectos deslumbrantes.", times:["12:30","15:45","19:00","22:20"], featured:true, upcoming:false },
-    { id:2, title:"The Last Lantern", title_es:"La Última Linterna", genre:"Drama", rating: "PG", runtime: "1h 55m", score: "7.5", desc:"Una historia íntima sobre familia y reconciliación.", times:["11:00","14:00","18:30"], featured:false, upcoming:false },
-    { id:3, title:"Pixel Pals", title_es:"Amigos Pixelados", genre:"Animación", rating: "G", runtime: "1h 30m", score: "7.9", desc:"Un viaje animado y emotivo para todas las edades.", times:["10:00","12:45","16:00","18:15"], featured:true, upcoming:false },
-    { id:4, title:"Night Howl", title_es:"Aullido Nocturno", genre:"Terror", rating: "R", runtime: "1h 45m", score: "6.8", desc:"Un thriller tenso que te mantendrá en vilo.", times:["20:30","22:45"], featured:false, upcoming:false },
-    { id:5, title:"Ocean's Drift", title_es:"Deriva Oceánica", genre:"Acción", rating: "PG-13", runtime: "2h", score: "7.0", desc:"Acción marítima y rescates audaces.", times:["13:15","16:30","19:30"], featured:false, upcoming:false },
-    { id:6, title:"The Batman", title_es:"The Batman", genre:"Acción", rating:"R", runtime:"2h 55m", score:"8.3", desc:"Detective noir en la oscura ciudad, una mirada cruda al vigilante.", times:["17:00","20:10","23:30"], featured:true, upcoming:false },
-    { id:7, title:"Nosferatu", title_es:"Nosferatu", genre:"Terror", rating:"R", runtime:"1h 46m", score:"7.6", desc:"Una reinterpretación del clásico del horror.", times:[], featured:false, upcoming:true },
-    { id:8, title:"One Battle After Another", title_es:"Una Batalla Tras Otra", genre:"Acción", rating:"PG-13", runtime:"2h 20m", score:"7.2", desc:"Acción intensa y coreografías a gran escala.", times:[], featured:false, upcoming:true }
+    { id:1, title:"Akira", title_es:"Akira", img:"akira.jpg", genre:"Acción", rating: "PG-13", runtime: "2h 4m", score: "9.5", desc:"En 1988, el gobierno japonés lanza una bomba atómica sobre Tokio tras el fracaso de unos experimentos de percepción extrasensorial (PES) en niños. En 2019, 31 años después del bombardeo, Kaneda, líder de una banda de motociclistas, intenta rescatar a su amigo Tetsuo de un proyecto secreto del gobierno. Se enfrenta a activistas antigubernamentales, políticos corruptos, científicos irresponsables y un poderoso líder militar hasta que los poderes sobrenaturales de Tetsuo se manifiestan repentinamente. La batalla final tiene lugar en la Olimpiada de Tokio, donde se revelan los secretos del experimento.", times:["12:30","15:45","19:00","22:20"], featured:true, upcoming:false },
+    { id:2, title:"Shaolin Soccer", title_es:"Shaolin Soccer", img:"shaolinSoccer.jpg", genre:"Comedia", rating: "PG-13", runtime: "1h 53m", score: "8.5", desc:"Toda su vida, un joven común y corriente ha sido tratado como un trapo. Aun así, nunca ha perdido la esperanza de que todos los problemas del mundo se puedan resolver con un poco de kung fu. Por eso, se une a un grupo de inadaptados —seis amigos que fueron maestros de kung fu en su juventud— para formar un equipo de fútbol que, según él, tiene posibilidades de ganar un gran premio de un millón de dólares. Juntos, aplicarán sus talentos ocultos a un juego completamente nuevo, y el fútbol jamás volverá a ser el mismo.", times:["11:00","14:00","18:30"], featured:false, upcoming:false },
+    { id:3, title:"Aftersun", title_es:"Aftersun", img:"aftersun.jpg", genre:"Drama", rating: "G", runtime: "1h 42m", score: "8.9", desc:"Veinte años después de sus últimas vacaciones en un balneario decadente, Sophie reflexiona sobre el escaso tiempo que pasó con su cariñoso e idealista padre, Calum. A sus once años, mientras el mundo de la adolescencia se abre paso en la mente de Sophie, Calum lucha bajo el peso de la vida sin la paternidad. Los recuerdos de Sophie se convierten en un retrato conmovedor y profundo de su relación, mientras intenta reconciliar al padre que conoció con el hombre que nunca llegó a conocer.", times:["10:00","12:45","16:00","18:15"], featured:true, upcoming:false },
+    { id:4, title:"Ojue", title_es:"Ojue", img:"ojue.jpg", genre:"Comedia", rating: "E", runtime: "13m", score: "1.0", desc:"Yeyesita wannabe gringa se da cuenta de que es inauténtca, superficial, y vendepatria: una historia inspirada en Fernando Broce.", times:["20:30","22:45"], featured:false, upcoming:false },
+    { id:5, title:"Anatomía de una caída", title_es:"Anatomía de una caída", img:"anatomia.jpg", genre:"Drama", rating: "PG-16", runtime: "2h 31m", score: "8.7", desc:"Sandra, una escritora alemana, vive con su marido Samuel y su hijo ciego, Daniel, en un chalé en medio de los Alpes franceses. Cuando Samuel fallece en misteriosas circunstancias, la investigación no puede determinar si se trata de un suicidio o de un homicidio. Sandra es arrestada y juzgada por asesinato, y el proceso pone su tumultuosa relación y su ambigua personalidad en el punto de mira.", times:["13:15","16:30","19:30"], featured:false, upcoming:false },
+    { id:6, title:"The Batman", title_es:"The Batman", img:"the-batman.jpg", img:"theBatman.jpg", genre:"Acción", rating:"R", runtime:"2h 55m", score:"9.2", desc:"Batman es llamado a intervenir cuando el alcalde de Gotham City es asesinado. Pronto, su investigación lo lleva a descubrir una red de corrupción, vinculada a su propio y oscuro pasado.", times:["17:00","20:10","23:30"], featured:true, upcoming:false },
+    { id:7, title:"Nosferatu", title_es:"Nosferatu", img:"nosferatu.jpg", genre:"Terror", rating:"R", runtime:"1h 46m", score:"9.4", desc:"Una reinterpretación del clásico del horror.", times:[], featured:false, upcoming:true },
+    { id:8, title:"Una Batalla Tras Otra", title_es:"Una Batalla Tras Otra", img:"unaBatalla.jpg", genre:"Acción", rating:"PG-13", runtime:"2h 20m", score:"9.3", desc:"Bob, un revolucionario acabado (Leonardo DiCaprio) se mantiene en un estado de paranoia inducida por las drogas y sobrevive aislado junto con su vivaz e independiente hija, Willa (Chase Infiniti). Cuando su malvado némesis (Sean Penn) resurge después de 16 años y Willa desaparece, el exradical se lanza a buscarla mientras ambos, padre e hija, deberán enfrentarse a las consecuencias de su pasado.", times:[], featured:false, upcoming:true }
   ];
 
   // Add reserved seats storage for each movie (per time)
@@ -421,11 +421,38 @@
   // ------------------------
   // Helpers / Posters
   // ------------------------
-  function posterSVG(title){
-    const initials = (title||'').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
-    return `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font-size:28px">
-    <div style="width:84px;height:84px;border-radius:12px;background:linear-gradient(135deg,#ff6b8a,#7a5cff);display:grid;place-items:center;font-weight:900">${initials}</div>
+  // Poster helper: will use a movie.img if available.
+  function posterSVG(movieOrTitle){
+    // If an object with img was passed, use it directly
+    if(typeof movieOrTitle === 'object' && movieOrTitle !== null && movieOrTitle.img){
+      const src = String(movieOrTitle.img).replace(/"/g,'');
+      const alt = (movieOrTitle.title_es || movieOrTitle.title || 'Póster').replace(/"/g,'');
+      return `<img src="${src}" alt="${alt}" style="width:100%; height:100%; object-fit:cover; border-radius: inherit;">`;
+    }
+
+    // If a string (title) was passed, try to find a matching movie with an img
+    if(typeof movieOrTitle === 'string'){
+      const title = movieOrTitle.trim().toLowerCase();
+      const found = movies.find(m => (m.title && m.title.toLowerCase() === title) || (m.title_es && m.title_es.toLowerCase() === title));
+      if(found && found.img){
+        const src = String(found.img).replace(/"/g,'');
+        const alt = (found.title_es || found.title || 'Póster').replace(/"/g,'');
+        return `<img src="${src}" alt="${alt}" style="width:100%; height:100%; object-fit:cover; border-radius: inherit;">`;
+      }
+    }
+
+    // Fallback: initials box (keeps previous appearance)
+    const titleText = (typeof movieOrTitle === 'string') ? movieOrTitle : (movieOrTitle && (movieOrTitle.title || movieOrTitle.title_es)) || '';
+    const initials = titleText.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase() || '🎬';
+    return `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font-size:28px;background:linear-gradient(135deg,#ff6b6b,#b23b3b);color:white;border-radius:inherit">
+      <div style="font-weight:900">${initials}</div>
     </div>`;
+  }
+
+
+  // small escape to use full description in title attribute safely
+  function escapeHtml(str){
+    return String(str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
   // ------------------------
@@ -441,11 +468,17 @@
     ? (m.times||[]).slice(0,6).map(t=>`<button class="time-btn" data-id="${m.id}" data-time="${t}">${t}</button>`).join('')
     : '';
 
+    // TRUNCATE description for cards so the boxes don't show the full text.
+    // Full description will still appear when clicking the card (details panel / modal).
+    const desc = m.desc || '';
+    const MAX_CHARS = 110; // adjust length as desired
+    const descShort = desc.length > MAX_CHARS ? desc.slice(0, MAX_CHARS).trim() + '…' : desc;
+
     wrapper.innerHTML = `
     <div class="thumb" aria-hidden>${posterSVG(m.title)}</div>
     <h3>${titleDisplay}</h3>
     <div class="meta"><span class="rating">${m.score}</span><span>${m.genre}</span><span>${m.runtime}</span></div>
-    <p style="color:var(--muted);margin-top:.45rem;font-size:.92rem">${m.desc}</p>
+    <p style="color:var(--muted);margin-top:.45rem;font-size:.92rem" title="${escapeHtml(desc)}">${descShort}</p>
     ${ timesHtml ? `<div class="showtimes" style="margin-top:.6rem">${timesHtml}</div>` : (m.upcoming ? `<div style="margin-top:.6rem;color:var(--muted);font-size:.9rem">Próximamente — funciones por anunciar</div>` : '') }
     `;
     return wrapper;
@@ -564,7 +597,7 @@
     }
     currentModal.movieId = movieId;
     currentModal.time = time || (m.times && m.times[0]);
-    selectedSeats = []; // reset selection each open
+    selectedSeats = []; // reset selection cada apertura
     const titleDisplay = m.title_es || m.title;
     modalTitle.textContent = `${titleDisplay} — ${currentModal.time || ''}`;
     modalPoster.innerHTML = posterSVG(m.title);
